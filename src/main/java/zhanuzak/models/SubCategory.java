@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.PERSIST;
+
 @Getter
 @Setter
 @Entity
@@ -20,9 +23,9 @@ public class SubCategory {
     @SequenceGenerator(name = "sub_category_seq")
     private Long id;
     private String name;
-    @OneToMany(mappedBy = "subCategory")
+    @OneToMany(mappedBy = "subCategory",cascade = {MERGE,REFRESH,DETACH,PERSIST})
     private List<MenuItem>menuItems;
-    @ManyToOne
+    @ManyToOne(cascade = {MERGE,REFRESH,DETACH,PERSIST})
     private Category category;
 
 }

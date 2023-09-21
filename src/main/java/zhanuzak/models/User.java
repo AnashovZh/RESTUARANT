@@ -1,7 +1,6 @@
 package zhanuzak.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,7 +10,7 @@ import zhanuzak.enums.Role;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
-
+import static jakarta.persistence.CascadeType.*;
 @Getter
 @Setter
 @Builder
@@ -24,31 +23,23 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
     @SequenceGenerator(name = "user_seq", allocationSize = 1)
     private Long id;
-    @NotNull
     @Column(name = "first_name")
     private String firstName;
-    @NotNull
     @Column(name = "last_name")
     private String lastName;
-    @NotNull
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
-    @NotNull
     @Column(unique = true)
     private String email;
-    @NotNull
     private String password;
-    @NotNull
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
-    @NotNull
     @Enumerated(EnumType.STRING)
     private Role role;
-    @NotNull
     private int experience;
-    @ManyToOne
+    @ManyToOne(cascade = {MERGE,REFRESH,DETACH,PERSIST})
     private Restaurant restaurant;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = {MERGE,REFRESH,DETACH,PERSIST})
     private List<Cheque> cheques;
 
 

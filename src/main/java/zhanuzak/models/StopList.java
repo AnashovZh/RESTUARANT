@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.PERSIST;
+
 @Getter
 @Setter
 @Entity
@@ -21,7 +24,7 @@ public class StopList {
     private Long id;
     private String reason;
     private LocalDate date;
-    @OneToOne
+    @OneToOne(cascade = {MERGE,REFRESH,DETACH,PERSIST})
     private MenuItem menuItem;
 
 }

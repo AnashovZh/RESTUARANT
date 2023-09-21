@@ -10,6 +10,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.PERSIST;
+
 @Getter
 @Setter
 @Entity
@@ -25,10 +28,10 @@ public class Cheque {
     private BigDecimal priceAverage;
     @Column(name = "created_at")
     private LocalDate createdAt;
-    @ManyToOne
+    @ManyToOne(cascade = {MERGE,REFRESH,DETACH,PERSIST})
     private User user;
     @Column(name = "menu_items")
-    @ManyToMany(mappedBy = "cheques")
+    @ManyToMany(mappedBy = "cheques",cascade = {MERGE,REFRESH,DETACH,PERSIST})
     private List<MenuItem> menuItems;
 
 

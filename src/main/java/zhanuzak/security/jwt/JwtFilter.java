@@ -15,7 +15,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import zhanuzak.exceptions.exception.NotFoundException;
 import zhanuzak.models.User;
 import zhanuzak.repository.UserRepository;
-
 import java.io.IOException;
 
 @Component

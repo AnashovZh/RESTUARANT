@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.*;
+
 @Getter
 @Setter
 @Entity
@@ -20,7 +22,7 @@ public class Category {
     @SequenceGenerator(name = "category_seq",allocationSize = 1)
     private Long id;
     private String name;
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category",cascade = ALL)
     private List<SubCategory>subCategories;
 
 }

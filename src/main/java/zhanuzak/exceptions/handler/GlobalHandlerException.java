@@ -21,7 +21,17 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(MaxUsersExceededException.class)
     @ResponseStatus(HttpStatus.BAD_GATEWAY)
-    public ExceptionResponse maxUsersExceededException(MaxUsersExceededException n) {
+    public ExceptionResponse nonNullException(MaxUsersExceededException n) {
+        return ExceptionResponse.builder()
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .exceptionClassName(n.getClass().getSimpleName())
+                .message(n.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(NonNullException.class)
+    @ResponseStatus(HttpStatus.BAD_GATEWAY)
+    public ExceptionResponse nonNullException(NonNullException n) {
         return ExceptionResponse.builder()
                 .httpStatus(HttpStatus.BAD_REQUEST)
                 .exceptionClassName(n.getClass().getSimpleName())

@@ -8,7 +8,7 @@ public class RestaurantProjectApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(RestaurantProjectApplication.class, args);
-        System.err.println("☺尺乇丂ｲひﾑ尺ﾑ刀ｲ ᄽᄿrunᄽᄿ");
+        System.err.println("☺尺乇丂ｲﾑひ尺ﾑ刀ｲ ᄽᄿrunᄽᄿ");
     }
 
 }

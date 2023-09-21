@@ -33,6 +33,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+
 }
 
 tasks.named('test') {
