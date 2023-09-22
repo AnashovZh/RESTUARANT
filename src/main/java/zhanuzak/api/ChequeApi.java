@@ -1,7 +1,6 @@
 package zhanuzak.api;
 
 import jakarta.annotation.security.PermitAll;
-import jakarta.persistence.ElementCollection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +26,13 @@ public class ChequeApi {
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN','WAITER')")
-    SimpleResponse save(@RequestBody ChequeRequest chequeRequest,
-                        @RequestParam List<String> menuItemNames) {
-        return chequeService.save( menuItemNames, chequeRequest);
+    SimpleResponse save(@RequestBody ChequeRequest chequeRequest) {
+        return chequeService.save(chequeRequest);
+    }
+
+    @PermitAll
+    @GetMapping("/{id}")
+    ChequeResponse getById(@PathVariable Long id) {
+        return chequeService.getById(id);
     }
 }

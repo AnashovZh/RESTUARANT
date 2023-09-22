@@ -25,7 +25,7 @@ public class RestaurantJdbcTemplateImpl implements RestaurantJdbcTemplate {
                 rs.getString("location"),
                 restType,
                 rs.getInt("numberOfEmployees"),
-                rs.getInt("service"));
+                rs.getBigDecimal("service"));
     }
     @Override
     public Optional<RestaurantResponse> getById(Long id) {

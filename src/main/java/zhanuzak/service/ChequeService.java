@@ -9,5 +9,7 @@ import java.util.List;
 public interface ChequeService {
     List<ChequeResponse> getAll();
 
-    SimpleResponse save(List<String>menuItemNames,ChequeRequest chequeRequest);
+    SimpleResponse save(ChequeRequest chequeRequest);
+
+    ChequeResponse getById(Long id);
 }

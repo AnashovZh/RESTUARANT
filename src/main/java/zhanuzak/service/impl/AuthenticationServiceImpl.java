@@ -111,8 +111,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         if (restaurant.getUsers().size() < 16) {
                             user.setRestaurant(restaurant);
                             restaurantRepository.save(restaurant);
-                            String token = jwtService.generateToken(user);
                             userRepository.save(user);
+                            String token = jwtService.generateToken(user);
                             return AuthenticationResponse.builder()
                                     .role(user.getRole())
                                     .email(user.getEmail())
@@ -150,7 +150,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             restaurant.setLocation("Republic of Kyrgyzstan, Issyk-Kol region, Kara-Kol city");
             restaurant.setRestType(RestaurantType.FINE_DINING);
             restaurant.setNumberOfEmployees(15);
-            restaurant.setService(15);
+//            restaurant.setService(15);
             restaurant.setUsers(List.of(user));
             restaurantRepository.save(restaurant);
             user.setRestaurant(restaurant);

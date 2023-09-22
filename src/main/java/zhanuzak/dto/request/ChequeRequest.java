@@ -4,18 +4,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class ChequeRequest {
-    private BigDecimal priceAverage;
     private LocalDate createdAt;
+    private List<String>menuItemNames;
 
-    public ChequeRequest(BigDecimal priceAverage, LocalDate createdAt) {
-        this.priceAverage = priceAverage;
+    public ChequeRequest(LocalDate createdAt, List<String> menuItemNames) {
         this.createdAt = createdAt;
+        this.menuItemNames = menuItemNames;
     }
 }

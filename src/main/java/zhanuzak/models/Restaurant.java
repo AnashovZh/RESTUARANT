@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import zhanuzak.dto.request.RestaurantRequest;
 import zhanuzak.enums.RestaurantType;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.ALL;
@@ -27,7 +28,7 @@ public class Restaurant {
     private RestaurantType restType;
     @Column(name = "number_of_employees")
     private int numberOfEmployees;
-    private int service;
+    private BigDecimal service;
     @OneToMany(mappedBy = "restaurant",cascade = ALL)
     private List<User> users;
     @OneToMany(mappedBy = "restaurant",cascade = ALL)
@@ -73,11 +74,11 @@ public class Restaurant {
         this.numberOfEmployees = numberOfEmployees;
     }
 
-    public int getService() {
+    public BigDecimal getService() {
         return service;
     }
 
-    public void setService(int service) {
+    public void setService(BigDecimal service) {
         this.service = service;
     }
 

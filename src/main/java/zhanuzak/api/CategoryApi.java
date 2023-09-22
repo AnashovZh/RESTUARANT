@@ -8,7 +8,6 @@ import zhanuzak.dto.request.CategoryRequest;
 import zhanuzak.dto.response.CategoryResponse;
 import zhanuzak.dto.response.SimpleResponse;
 import zhanuzak.service.CategoryService;
-
 import java.util.List;
 
 @RestController
@@ -37,7 +36,8 @@ public class CategoryApi {
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PutMapping("/{id}")
-    SimpleResponse update(@PathVariable Long id, @RequestBody CategoryRequest categoryRequest) {
+    SimpleResponse update(@PathVariable Long id,
+                          @RequestBody CategoryRequest categoryRequest) {
         return categoryService.update(id, categoryRequest);
     }
 

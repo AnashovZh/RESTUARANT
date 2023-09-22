@@ -4,6 +4,8 @@ import lombok.*;
 import zhanuzak.enums.RestaurantType;
 import zhanuzak.models.Restaurant;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,9 +17,11 @@ public class RestaurantResponse {//r.id,r.name,r.location,r.restType,r.numberOfE
     private String location;
     private RestaurantType restType;
     private int numberOfEmployees;
-    private int service;
+    private BigDecimal service;
 
-    public RestaurantResponse(Long id, String name, String location, RestaurantType restType, int numberOfEmployees, int service) {
+    public RestaurantResponse(Long id, String name, String location,
+                              RestaurantType restType, int numberOfEmployees,
+                              BigDecimal service) {
         this.id = id;
         this.name = name;
         this.location = location;

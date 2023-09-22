@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import zhanuzak.enums.RestaurantType;
 
+import java.math.BigDecimal;
+
 @Builder
 public record RestaurantRequest(@NotNull String name, @NotNull String location,
                                 @NotNull RestaurantType restType,
@@ -13,5 +15,5 @@ public record RestaurantRequest(@NotNull String name, @NotNull String location,
                                 int numberOfEmployees,
                                 @NotNull
                                 @JsonProperty("service")
-                                int service) {
+                                BigDecimal service) {
 }
