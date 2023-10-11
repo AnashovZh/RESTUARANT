@@ -1,23 +1,20 @@
 package zhanuzak.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.*;
-import static jakarta.persistence.CascadeType.PERSIST;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "cheques")
 @NoArgsConstructor
+@ToString
 @AllArgsConstructor
 public class Cheque {
     @Id

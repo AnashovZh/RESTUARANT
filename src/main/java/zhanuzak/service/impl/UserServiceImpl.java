@@ -10,6 +10,7 @@ import org.springframework.util.ReflectionUtils;
 import zhanuzak.dto.response.SimpleResponse;
 import zhanuzak.dto.response.UserResponse;
 import zhanuzak.enums.Role;
+import zhanuzak.exceptions.exception.BadCreadentialException;
 import zhanuzak.exceptions.exception.NotFoundException;
 import zhanuzak.models.Restaurant;
 import zhanuzak.models.User;
@@ -20,6 +21,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional
@@ -38,6 +40,7 @@ public class UserServiceImpl implements UserService {
         String email = authentication.getName();
         User user = userRepository.getUserByEmail(email).orElseThrow(() ->
                 new NotFoundException("User with emil:" + " not found !!!"));
+
         Restaurant restaurant = user.getRestaurant();
         Long restaurantId = restaurant.getId();
         return userRepository.getAllUsers(restaurantId);
@@ -50,18 +53,23 @@ public class UserServiceImpl implements UserService {
         for (User user : all1) {
             if (user.getRestaurant() == null) {
                 userResponses.add(new UserResponse(user.getId(), user.getFirstName(), user.getDateOfBirth()
-                        , user.getEmail(), user.getPassword(), user.getPhoneNumber(), user.getRole(), user.getExperience()));
+        ,user.getEmail(), user.getPassword(), user.getPhoneNumber(), user.getRole(), user.getExperience()));
             }
         }
         return userResponses;
     }
+ 
 
     @Override
     public SimpleResponse delete(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("User with id:" + id + "not found!!"));
+        Restaurant restaurant = user.getRestaurant();
+        restaurant.setNumberOfEmployees(restaurant.getNumberOfEmployees()-1);
         userRepository.deleteById(id);
         return SimpleResponse.builder()
                 .httpStatus(HttpStatus.OK)
-                .message("User with id:"+id+" successfully deleted ☺")
+                .message("User with id:" + id + " successfully deleted ☺")
                 .build();
     }
 
@@ -86,7 +94,7 @@ public class UserServiceImpl implements UserService {
         });
         return SimpleResponse.builder()
                 .httpStatus(HttpStatus.OK)
-                .message("User with id:"+id+" successfully updated ☺")
+                .message("User with id:" + id + " successfully updated ☺")
                 .build();
     }
 }

@@ -16,6 +16,7 @@ import static jakarta.persistence.CascadeType.*;
 @Builder
 @Entity
 @NoArgsConstructor
+@ToString
 @AllArgsConstructor
 @Table(name = "users")
 public class User implements UserDetails {

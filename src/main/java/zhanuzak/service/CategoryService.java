@@ -16,4 +16,6 @@ public interface CategoryService {
     SimpleResponse update(Long id, CategoryRequest categoryRequest);
 
     SimpleResponse delete(Long id);
+
+    CategoryResponse getByIdWithSubCategory(Long id);
 }

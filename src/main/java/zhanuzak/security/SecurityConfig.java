@@ -3,6 +3,7 @@ package zhanuzak.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -25,6 +26,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
+
     private final UserRepository userRepository;
     private final JwtFilter jwtFilter;
 
@@ -63,4 +65,10 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
+
+//    @Bean
+//    public JdbcTemplate getJdbcTemplate(){
+//        JdbcTemplate jdbcTemplate=new JdbcTemplate();
+//        return jdbcTemplate;
+//    }
 }

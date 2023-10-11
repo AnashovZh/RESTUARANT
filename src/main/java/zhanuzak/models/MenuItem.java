@@ -1,21 +1,24 @@
 package zhanuzak.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import zhanuzak.dto.request.MenuItemRequest;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.*;
+
 @Getter
 @Setter
+@ToString
 @Entity
 @Table(name = "menu_items")
 @NoArgsConstructor
-@AllArgsConstructor
+
 public class MenuItem {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "menu_item_seq")
@@ -30,7 +33,7 @@ public class MenuItem {
     private boolean isVegetarian;
     @ManyToOne
     private Restaurant restaurant;
-    @ManyToMany
+    @ManyToMany(cascade = {MERGE, REFRESH, DETACH})
     private List<Cheque> cheques;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH,
             CascadeType.PERSIST, CascadeType.REFRESH})
@@ -38,6 +41,16 @@ public class MenuItem {
     @OneToOne(mappedBy = "menuItem", cascade = {CascadeType.MERGE, CascadeType.DETACH,
             CascadeType.PERSIST, CascadeType.REFRESH})
     private StopList stopList;
+
+    public MenuItem(Long id, String name, String image, BigDecimal price,
+                    String description, boolean isVegetarian) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.price = price;
+        this.description = description;
+        this.isVegetarian = isVegetarian;
+    }
 
     public static MenuItem buildStatic(MenuItemRequest menuItemRequest) {
         MenuItem menuItem = new MenuItem();

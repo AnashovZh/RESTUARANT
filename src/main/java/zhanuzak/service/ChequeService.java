@@ -12,4 +12,12 @@ public interface ChequeService {
     SimpleResponse save(ChequeRequest chequeRequest);
 
     ChequeResponse getById(Long id);
+
+    SimpleResponse update(Long id, ChequeRequest chequeRequest);
+
+    SimpleResponse delete(Long id);
+
+    List<ChequeResponse> getAllChequeByUserEmail(String email);
+
+    List<ChequeResponse> getAllChequesByUserEmail2(String email);
 }

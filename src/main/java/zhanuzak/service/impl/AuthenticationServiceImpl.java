@@ -22,6 +22,7 @@ import zhanuzak.repository.UserRepository;
 import zhanuzak.security.jwt.JwtService;
 import zhanuzak.service.AuthenticationService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
@@ -51,9 +52,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     if (password.length() >= 4) {
                         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                         String email = authentication.getName();
-                        User user1 = userRepository.getUserByEmail(email).orElseThrow(() ->
+                        User admin = userRepository.getUserByEmail(email).orElseThrow(() ->
                                 new NotFoundException("User with emil:" + " not found !!!"));
-                        Restaurant restaurant = user1.getRestaurant();
+                        Restaurant restaurant = admin.getRestaurant();
                         restaurantRepository.save(restaurant);
                         User user = new User();
                         user.setFirstName(signUpRequest.getFirstName());
@@ -64,6 +65,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         user.setPhoneNumber(signUpRequest.getPhoneNumber());
                         user.setRole(signUpRequest.getRole());
                         user.setExperience(signUpRequest.getExperience());
+                        int numberOfEmployees = restaurant.getNumberOfEmployees();
+                        restaurant.setNumberOfEmployees(numberOfEmployees+1);
                         if (restaurant.getUsers().size() < 16) {
                             user.setRestaurant(restaurant);
                             restaurantRepository.save(restaurant);
@@ -110,8 +113,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         user.setExperience(signUpRequest.getExperience());
                         if (restaurant.getUsers().size() < 16) {
                             user.setRestaurant(restaurant);
+                            int numberOfEmployees = restaurant.getNumberOfEmployees();
+                            restaurant.setNumberOfEmployees(numberOfEmployees+1);
                             restaurantRepository.save(restaurant);
-                            userRepository.save(user);
+                            User save = userRepository.save(user);
                             String token = jwtService.generateToken(user);
                             return AuthenticationResponse.builder()
                                     .role(user.getRole())
@@ -149,8 +154,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             restaurant.setName("Flavors of the Tian-Shan");
             restaurant.setLocation("Republic of Kyrgyzstan, Issyk-Kol region, Kara-Kol city");
             restaurant.setRestType(RestaurantType.FINE_DINING);
-            restaurant.setNumberOfEmployees(15);
-//            restaurant.setService(15);
+            restaurant.setNumberOfEmployees(0);
+            restaurant.setService(BigDecimal.valueOf(8, 8));
             restaurant.setUsers(List.of(user));
             restaurantRepository.save(restaurant);
             user.setRestaurant(restaurant);
@@ -251,26 +256,38 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    @Transactional
     public SimpleResponse acceptOrNotAccepted(String email, String acceptOrNotAccepted) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String emailUser = authentication.getName();
-        User user1 = userRepository.getUserByEmail(emailUser).orElseThrow(() ->
+        User admin = userRepository.getUserByEmail(emailUser).orElseThrow(() ->
                 new NotFoundException("User with emil:" + " not found !!!"));
+
         if (acceptOrNotAccepted.equalsIgnoreCase("accept")) {
             User user = userRepository.getUserByEmail(email).orElseThrow(() ->
                     new NotFoundException("User with email :" + email + " not found !!!"));
-            if (user1.getRestaurant().getUsers().size() < 16) {
-                user1.getRestaurant().setUsers(List.of(user));
-                user.setRestaurant(user1.getRestaurant());
-                userRepository.save(user);
+            if (admin.getRestaurant().getUsers().size() < 16) {
+                admin.getRestaurant().add(user);
+                user.setRestaurant(restaurantRepository.findById(admin.getRestaurant().getId()).orElse(null));
+                Restaurant restaurant = admin.getRestaurant();
+                int numberOfEmployees = restaurant.getNumberOfEmployees();
+                restaurant.setNumberOfEmployees(numberOfEmployees+1);
+                User save = userRepository.save(user);
                 return SimpleResponse.builder()
                         .httpStatus(HttpStatus.CREATED)
-                        .message(user.getRole() + " " + user.getFirstName() + " " + user.getLastName() + " " + " successfully ☺ got a job in your restaurant")
+                        .message(user.getRole() + " " + save.getFirstName() + " " + save
+                                .getLastName() + " " + " successfully ☺ got a job in your restaurant")
                         .build();
+
+
             }
         } else if (acceptOrNotAccepted.equalsIgnoreCase("notAccepted")) {
             User user = userRepository.getUserByEmail(email).orElseThrow(() ->
                     new NotFoundException("User with email :" + email + " not found !!!"));
+            Restaurant restaurant = admin.getRestaurant();
+            int numberOfEmployees = restaurant.getNumberOfEmployees();
+            restaurant.setNumberOfEmployees(numberOfEmployees-1);
+            restaurantRepository.save(restaurant);
             userRepository.delete(user);
             return SimpleResponse.builder()
                     .httpStatus(HttpStatus.OK)
@@ -279,7 +296,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         return SimpleResponse.builder()
                 .httpStatus(HttpStatus.BAD_REQUEST)
-                .message("You entered the functions incorrectly (notAccepted,accept) !!!")
+                .message("You entered the functions incorrectly (notAccepted or accept) !!!")
                 .build();
     }
 }
