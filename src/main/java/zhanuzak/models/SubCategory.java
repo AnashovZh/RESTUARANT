@@ -25,7 +25,7 @@ public class SubCategory {
     private String name;
     @OneToMany(mappedBy = "subCategory",cascade = {MERGE,REFRESH,DETACH,PERSIST})
     private List<MenuItem>menuItems;
-    @ManyToOne(cascade = {MERGE,REFRESH,DETACH,PERSIST})
+    @ManyToOne(cascade = {MERGE,REFRESH,DETACH,PERSIST,REMOVE})
     private Category category;
 
 }

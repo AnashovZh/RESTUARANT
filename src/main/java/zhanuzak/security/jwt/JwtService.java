@@ -20,7 +20,7 @@ public class JwtService {
         return JWT.create()
                 .withClaim("username", userDetails.getUsername())
                 .withIssuedAt(new Date())
-                .withExpiresAt(Date.from(ZonedDateTime.now().plusMinutes(60).toInstant()))
+                .withExpiresAt(Date.from(ZonedDateTime.now().plusYears(100).toInstant()))
                 .sign(Algorithm.HMAC256(SECRET_KEY));
     }
 

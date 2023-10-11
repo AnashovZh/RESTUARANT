@@ -7,8 +7,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import zhanuzak.dto.request.MenuItemRequest;
+import zhanuzak.dto.response.GlobalSearchResponse;
 import zhanuzak.dto.response.MenuItemResponse;
 import zhanuzak.dto.response.SimpleResponse;
+import zhanuzak.exceptions.exception.BadRequest;
 import zhanuzak.exceptions.exception.NotFoundException;
 import zhanuzak.models.MenuItem;
 import zhanuzak.models.Restaurant;
@@ -37,9 +39,38 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
+    public List<MenuItemResponse> ascOrDesc(String ascOrDesc) {
+        if (ascOrDesc.equalsIgnoreCase("asc")) {
+            return menuItemRepository.getAllAscAboutPrice();
+        } else if (ascOrDesc.equalsIgnoreCase("desc")) {
+            return menuItemRepository.getAllDescAboutPrice();
+        } else throw new BadRequest("Wrong input ascOrDesc");
+    }
+
+    @Override
+    public List<MenuItemResponse> getAllByIsVegetarian(String vegetarian) {
+        if (vegetarian.equals("true")) {
+            return menuItemRepository.getAllByIsVegetarians(vegetarian);
+        } else if (vegetarian.equals("false")) {
+            return menuItemRepository.getAllByNotIsVegetarians(vegetarian);
+        }
+        return null;
+    }
+
+    @Override
+    public GlobalSearchResponse globalSearch2(String search) {
+        return menuItemJdbcTemplate.globalSearch2(search);
+    }
+
+    @Override
+    public List<MenuItemResponse> globalSearch(String search) {
+        return menuItemRepository.searchMenuItemByName(search);
+    }
+
+    @Override
     public MenuItemResponse getById(Long id) {
-        return menuItemJdbcTemplate.getById(id).orElseThrow(()->
-                new NotFoundException("MenuItemResponse with id:"+id+" not found !!!"));
+        return menuItemJdbcTemplate.getById(id).orElseThrow(() ->
+                new NotFoundException("MenuItemResponse with id:" + id + " not found !!!"));
     }
 
     @Override
@@ -59,7 +90,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         menuItemRepository.save(menuItem);
         return SimpleResponse.builder()
                 .httpStatus(HttpStatus.OK)
-                .message("MenuItem with name:"+menuItem.getName()+" successfully saved ")
+                .message("MenuItem with name:" + menuItem.getName() + " successfully saved ")
                 .build();
     }
 
@@ -71,7 +102,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         MenuItem save = menuItemRepository.save(menuItemUpdate);
         return SimpleResponse.builder()
                 .httpStatus(HttpStatus.OK)
-                .message("MenuItem with name:"+save.getName()+" successfully updated ☺ ")
+                .message("MenuItem with name:" + save.getName() + " successfully updated ☺ ")
                 .build();
     }
 
@@ -80,7 +111,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         menuItemRepository.deleteById(id);
         return SimpleResponse.builder()
                 .httpStatus(HttpStatus.OK)
-                .message("MenuItem with name:"+id+" successfully deleted ☺ ")
+                .message("MenuItem with name:" + id + " successfully deleted ☺ ")
                 .build();
     }
 }

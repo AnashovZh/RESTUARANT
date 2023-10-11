@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import zhanuzak.dto.request.SubCategoryRequest;
+import zhanuzak.dto.response.CategoryResponse;
 import zhanuzak.dto.response.SimpleResponse;
 import zhanuzak.dto.response.SubCategoryResponse;
 import zhanuzak.repository.dao.SubCategoryJdbcTemplate;
@@ -19,22 +20,34 @@ public class SubCategoryJdbcTemplateImpl implements SubCategoryJdbcTemplate {
     private final JdbcTemplate jdbcTemplate;
 
     private SubCategoryResponse rowMapper(ResultSet rs, int rowName) throws SQLException {
-        return new SubCategoryResponse(
-                rs.getLong("id"),
-                rs.getString("name"));
+        Long subcategoryId = rs.getLong("subcategory_id");
+        String subcategoryName = rs.getString("subcategory_name");
+        Long categoryId = rs.getLong("category_id");
+        String categoryName = rs.getString("category_name");
+
+        CategoryResponse categoryResponse = new CategoryResponse();
+        categoryResponse.setId(categoryId);
+        categoryResponse.setName(categoryName);
+
+//        return new SubCategoryResponse(subcategoryId, subcategoryName, categoryResponse);
+        return null;
     }
 
     @Override
     public Optional<SubCategoryResponse> findById(Long id) {
         String sql = """
-                select id,name as name from sub_categories s where s.id=?
+                SELECT s.id AS subcategory_id, s.name AS subcategory_name, c.id AS 
+                 category_id, c.name AS category_name
+                FROM sub_categories s JOIN categories c ON s.category_id = c.id
+                WHERE s.id = ?
                 """;
+
         return jdbcTemplate.query(sql, this::rowMapper, id).stream().findFirst();
     }
 
+
     @Override
     public SimpleResponse update(Long id, SubCategoryRequest subCategoryRequest) {
-//        update books set age=12 where id=2
         String sql = """
                 update sub_categories set name=? where id=?
                 """;

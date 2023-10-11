@@ -8,17 +8,21 @@ import zhanuzak.dto.request.CategoryRequest;
 import zhanuzak.dto.response.CategoryResponse;
 import zhanuzak.dto.response.SimpleResponse;
 import zhanuzak.service.CategoryService;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
 public class CategoryApi {
+
+    //    @Qualifier("CImpl")
     private final CategoryService categoryService;
 
     @PermitAll
     @GetMapping
     List<CategoryResponse> getAll() {
+        System.out.println();
         return categoryService.getAll();
     }
 
@@ -33,6 +37,13 @@ public class CategoryApi {
     CategoryResponse getById(@PathVariable Long id) {
         return categoryService.getById(id);
     }
+
+    @PermitAll
+    @GetMapping("/withSubCategory/{id}")
+    CategoryResponse getByIdWithSubCategory(@PathVariable Long id) {
+        return categoryService.getByIdWithSubCategory(id);
+    }
+
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PutMapping("/{id}")

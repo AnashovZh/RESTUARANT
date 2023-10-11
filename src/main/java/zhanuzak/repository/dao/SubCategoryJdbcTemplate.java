@@ -3,7 +3,6 @@ package zhanuzak.repository.dao;
 import zhanuzak.dto.request.SubCategoryRequest;
 import zhanuzak.dto.response.SimpleResponse;
 import zhanuzak.dto.response.SubCategoryResponse;
-import zhanuzak.models.SubCategory;
 
 import java.util.Optional;
 

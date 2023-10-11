@@ -7,12 +7,12 @@ import zhanuzak.dto.request.RestaurantRequest;
 import zhanuzak.enums.RestaurantType;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
-
 @Table(name = "restaurants")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -108,4 +108,8 @@ public class Restaurant {
         return restaurant;
     }
 
+    public void add(User user) {
+        if (this.users == null) this.users = new ArrayList<>();
+        else this.users.add(user);
+    }
 }
